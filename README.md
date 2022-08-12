@@ -8,3 +8,7 @@
 pip install flask
 
 python app.py
+
+小白 直接双击运行ssml maker2.exe
+
+浏览器进 127.0.0.1:5000 就可以访问到软件界面。
