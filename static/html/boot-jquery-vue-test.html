@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+    <script src="/static/js/vue.min.js"></script>
+    <script src="/static/js/jquery.min.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
+    <script src="/static/js/axios.min.js"></script>
+    <script src="/static/js/httpVueLoader.js"></script>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>Document</title>
+
+</head>
+
+<body>
+    <div id="app">
+        <div id="jj">
+            <p>{{ message }}</p>
+            <input type="text" v-model="tt[1]">
+            <my-component></my-component>
+            <todo-item></todo-item>
+        </div>
+        <button v-on:click="go"> 点我下 </button>
+    </div>
+    <div id="pp">
+        <p>hh</p>
+    </div>
+    <div id="ppa">
+        <my-component message="11" todo="123"></my-component>
+    </div>
+    <script>
+
+        vm = new Vue({
+            el: '#app',
+            data: {
+                message: 'Hello Vue.js!',
+                hh: "fffff",
+                msg: "hello Vue",
+                tt: [1, 2, 3, 4, 5, 6],
+            },
+            components: {
+                'my-component': httpVueLoader('test2.vue')
+            },
+            methods: {
+                go: function () {
+                    // $("#pp").load("test2.html")
+                    axios.post('http://127.0.0.1:5000/', {
+                        firstName: 'Fred',        // 参数 firstName
+                        lastName: 'Flintstone'    // 参数 lastName
+                    }).then(function (response) {
+                        console.log(response.data["uuid"]);
+                    })
+                },
+            }
+        })
+
+    </script>
+</body>
+
+</html>

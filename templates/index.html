@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+    <script src="/static/js/vue.min.js"></script>
+    <script src="/static/js/jquery.min.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
+    <script src="/static/js/axios.min.js"></script>
+    <title>SSML Maker V2.0</title>
+
+</head>
+{% raw %}
+
+<body>
+    <div class="container-fluid" id="app">
+        <div class="row">
+            <!-- 文本区域 -->
+            <div class="col-md-5">
+                <h2>SSML Maker v2.0</h2>
+            </div>
+        </div>
+        <div class="row">
+            <!-- 文本内容 -->
+            <div class="col-md-12">
+                <textarea class="form-control" rows="20" v-model="text"></textarea>
+            </div>
+        </div>
+        <div class="row">
+            <!-- 发射文本 -->
+            <div class="col-md-12">
+                <button class="btn btn-default" style="float:right;margin-top: 15px;" v-on:click="splitText">OK</button>
+            </div>
+        </div>
+        <!-- 总体设置 -->
+        <div class="row">
+            <div class="col-md-5">
+                <h3>设置总体播讲员：</h3>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-1">
+                <p>播讲员：</p>
+            </div>
+            <div class="col-md-5">
+                <select class="form-control" v-model="zhuBojiangYuan" @change="boJiangChange(-1)">
+                    <option v-for="(item,key) in person" v-bind:value="key">{{ item }}</option>
+                </select>
+            </div>
+            <div class="col-md-1">
+                <p>语气：</p>
+            </div>
+            <div class="col-md-5">
+                <select class="form-control" v-model="zhuYuqi">
+                    <option v-for="i in zhuYuqiList" v-bind:value="i"> {{ chinese[i] }}</option>
+                </select>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-1">
+                <p>速度：</p>
+            </div>
+            <div class="col-md-2">
+                <select class="form-control" v-model="zhuSuDu">
+                    <option value="-50%">0.5</option>
+                    <option value="-40%">0.6</option>
+                    <option value="-30%">0.7</option>
+                    <option value="-20%">0.8</option>
+                    <option value="-10%">0.9</option>
+                    <option value="0%">1.0</option>
+                    <option value="10%">1.1</option>
+                    <option value="20%">1.2</option>
+                    <option value="30%">1.3</option>
+                    <option value="40%">1.4</option>
+                    <option value="50%">1.5</option>
+                    <option value="100%">2.0</option>
+                    <option value="200%">3.0</option>
+                </select>
+            </div>
+            <div class="col-md-1">
+                <p>声调：</p>
+            </div>
+            <div class="col-md-2">
+                <select class="form-control" v-model="zhuShengDiao">
+                    <option value="-50%">-5</option>
+                    <option value="-40%">-4</option>
+                    <option value="-30%">-3</option>
+                    <option value="-20%">-2</option>
+                    <option value="-10%">-1</option>
+                    <option value="0%">0</option>
+                    <option value="10%">1</option>
+                    <option value="20%">2</option>
+                    <option value="30%">3</option>
+                    <option value="40%">4</option>
+                    <option value="50%">5</option>
+                </select>
+            </div>
+            <div class="col-md-1">
+                <p>停顿：</p>
+            </div>
+            <div class="col-md-2">
+                <select class="form-control" v-model="zhuTingDun">
+                    <option value="0">0秒</option>
+                    <option value="1">1秒</option>
+                    <option value="2">2秒</option>
+                    <option value="3">3秒</option>
+                    <option value="4">4秒</option>
+                    <option value="5">5秒</option>
+                </select>
+            </div>
+            <div class="col-md-3" style="margin-bottom: 15px;">
+                <button class="btn btn-default" style="float:right;margin-top: 15px;" @click="setAll">设定</button>
+            </div>
+        </div>
+        <!-- 处理机 -->
+        <div class="row" v-for="(item,index) in splitTexts">
+            <div class="col-md-12" style="border:1px;border-color: black;border-style: dashed;">
+                <div class="row">
+                    <div class="col-md-12">
+                        <label for="thisrow">第{{index}}行</label>
+                        <input type="input" class="form-control" id="thisrow" placeholder="文本内容" v-model="splitTexts[index]">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <!-- 生成独立ssml -->
+                        <button class="btn btn-danger" style="width: 100%;" @click="makeIdSSML(index)">生成独立ssml</button>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <!-- 存放独立ssml -->
+                        <textarea class="form-control" rows="5" v-model="ssmls[index]"></textarea>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-1">
+                        <p>播讲员：</p>
+                    </div>
+                    <div class="col-md-5">
+                        <select class="form-control" v-model="boJiangYuan[index]" @change="boJiangChange(index)">
+                            <option v-for="(item,key) in person" v-bind:value="key">{{ item }}</option>
+                        </select>
+                    </div>
+                    <div class="col-md-1">
+                        <p>语气：</p>
+                    </div>
+                    <div class="col-md-5">
+                        <select class="form-control" v-model="yuQi[index]">
+                            <option v-for="i in yuQiList[index]" v-bind:value="i"> {{ chinese[i] }}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-1">
+                        <p>速度：</p>
+                    </div>
+                    <div class="col-md-2">
+                        <select class="form-control" v-model="suDu[index]">
+                            <option value="-50%">0.5</option>
+                            <option value="-40%">0.6</option>
+                            <option value="-30%">0.7</option>
+                            <option value="-20%">0.8</option>
+                            <option value="-10%">0.9</option>
+                            <option value="0%">1.0</option>
+                            <option value="10%">1.1</option>
+                            <option value="20%">1.2</option>
+                            <option value="30%">1.3</option>
+                            <option value="40%">1.4</option>
+                            <option value="50%">1.5</option>
+                            <option value="100%">2.0</option>
+                            <option value="200%">3.0</option>
+                        </select>
+                    </div>
+                    <div class="col-md-1">
+                        <p>声调：</p>
+                    </div>
+                    <div class="col-md-2">
+                        <select class="form-control" v-model="shengDiao[index]">
+                            <option value="-50%">-5</option>
+                            <option value="-40%">-4</option>
+                            <option value="-30%">-3</option>
+                            <option value="-20%">-2</option>
+                            <option value="-10%">-1</option>
+                            <option value="0%">0</option>
+                            <option value="10%">1</option>
+                            <option value="20%">2</option>
+                            <option value="30%">3</option>
+                            <option value="40%">4</option>
+                            <option value="50%">5</option>
+                        </select>
+                    </div>
+                    <div class="col-md-1">
+                        <p>停顿：</p>
+                    </div>
+                    <div class="col-md-2">
+                        <select class="form-control" v-model="tingDun[index]">
+                            <option value="0">0秒</option>
+                            <option value="1">1秒</option>
+                            <option value="2">2秒</option>
+                            <option value="3">3秒</option>
+                            <option value="4">4秒</option>
+                            <option value="5">5秒</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row" style="margin-top: 15px;">
+            <div class="col-md-12">
+                <!-- ssml存放地 -->
+                <textarea class="form-control" rows="10" v-model="ssml"></textarea>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <!-- 生成ssml的按钮 -->
+                <button class="btn btn-default" style="float:right;margin-top: 15px;" @click="ssmlMaker">生成ssml</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        var start = '<speak  xmlns="http://www.w3.org/2001/10/synthesis" xmlns:mstts="http://www.w3.org/2001/mstts" xmlns:emo="http://www.w3.org/2009/10/emotionml" version="1.0" xml:lang="en-US">'
+        var end = '</speak>'
+        var vm = new Vue({
+            el: '#app',
+            data: {
+                text: "",
+                chinese: {},
+                person: {},
+                readMethod: {},
+                zhuBojiangYuan: "zh-CN-XiaoxiaoNeural",//主播讲员
+                zhuYuqi: "general",//主语气
+                zhuTingDun: "0",//主停顿
+                zhuYuqiList: [],//主语气列表
+                zhuSuDu: "0%",
+                zhuShengDiao: "0%",
+                splitTexts: [], //分裂的文本
+                ssmls: [], //独立ssml
+                boJiangYuan: [], //播讲员们
+                yuQi: [], //语气
+                yuQiList: [], //语气列表们
+                suDu: [], //速度
+                shengDiao: [], //声调
+                tingDun: [],
+                ssml: "" //存放ssml
+            },
+            methods: {
+                splitText: function () {
+                    axios
+                        .post('/splitText', {
+                            text: this.text,        // 发送文本
+                        })
+                        .then(response => {
+                            // console.log(response.data)
+                            this.splitTexts = response.data.text
+                            this.chinese = response.data.chinese
+                            this.person = response.data.person
+                            this.readMethod = response.data.readMethod
+                            this.zhuYuqiList=[]
+                            this.boJiangYuan=[]
+                            this.yuQi=[]
+                            this.suDu=[]
+                            this.shengDiao=[]
+                            this.tingDun=[]
+                            this.ssmls=[]
+                            this.yuQiList=[]
+                            let temp = []
+                            for (let i in this.readMethod["zh-CN-XiaoxiaoNeural"]) {
+                                temp.push(this.readMethod["zh-CN-XiaoxiaoNeural"][i])
+                            }
+                            this.zhuYuqiList = temp
+                            for (let i in this.splitTexts) {
+                                this.boJiangYuan.push("zh-CN-XiaoxiaoNeural")
+                                this.yuQi.push("general")
+                                this.suDu.push("0%")
+                                this.shengDiao.push("0%")
+                                this.tingDun.push("0")
+                                this.ssmls.push("")
+                                let temp = []
+                                for (let i in this.readMethod["zh-CN-XiaoxiaoNeural"]) {
+                                    temp.push(this.readMethod["zh-CN-XiaoxiaoNeural"][i])
+                                }
+                                this.yuQiList.push(temp)
+
+                            }
+                        })
+                        .catch(function (error) { // 请求失败处理
+                            console.log(error);
+                        });
+                },
+                boJiangChange: function (boJiangId) {
+                    if (boJiangId == -1) {
+                        let nList = []
+                        for (let i in this.readMethod[this.zhuBojiangYuan]) {
+                            nList.push(this.readMethod[this.zhuBojiangYuan][i])
+                        }
+                        this.zhuYuqiList = nList
+                    } else {
+                        let nList = []
+                        for (let i in this.readMethod[this.boJiangYuan[boJiangId]]) {
+                            nList.push(this.readMethod[this.boJiangYuan[boJiangId]][i])
+                        }
+                        this.$set(this.yuQiList, boJiangId, nList)
+                    }
+                },
+                makeIdSSML: function (index) { //生成独立的ssml index是第一个框，isVis是是否需要显示
+                    axios
+                        .post('/idssml', {
+                            text: this.splitTexts[index],
+                            boJiangYuan: this.boJiangYuan[index],
+                            yuQi: this.yuQi[index],
+                            suDu: this.suDu[index],
+                            shengDiao: this.shengDiao[index],
+                            tingDun: this.tingDun[index],
+                        })
+                        .then(response => {
+                            // console.log(response.data)
+                            this.$set(this.ssmls, index, start + "\n" + response.data + "\n" + end)
+
+
+                            // this.$set(this.ssmlTemp, index, response.data)
+                        })
+                        .catch(function (error) { // 请求失败处理
+                            console.log(error);
+                        });
+
+                },
+                ssmlMaker: function () {
+
+                    axios
+                        .post('/allssml', {
+                            text: this.splitTexts,
+                            boJiangYuan: this.boJiangYuan,
+                            yuQi: this.yuQi,
+                            suDu: this.suDu,
+                            shengDiao: this.shengDiao,
+                            tingDun: this.tingDun,
+                        })
+                        .then(response => {
+                            // console.log(response.data)
+                            this.ssml = start + "\n" + response.data + end
+                            if (navigator.clipboard) {
+                                navigator.clipboard.writeText(this.ssml);
+                                alert("生成并复制完成！")
+                            }
+                        })
+                        .catch(function (error) { // 请求失败处理
+                            console.log(error);
+                        });
+                },
+                setAll: function () {
+                    for(var i in this.splitTexts){
+                        this.$set(this.boJiangYuan,i,this.zhuBojiangYuan)
+                        this.$set(this.yuQi,i,this.zhuYuqi)
+                        this.$set(this.yuQiList,i,this.zhuYuqiList)
+                        this.$set(this.suDu,i,this.zhuSuDu)
+                        this.$set(this.shengDiao,i,this.zhuShengDiao)
+                        this.$set(this.tingDun,i,this.zhuTingDun)
+                    }
+                }
+            }
+        })
+    </script>
+</body>
+{% endraw %}
+
+</html>

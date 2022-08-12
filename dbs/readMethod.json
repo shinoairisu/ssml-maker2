@@ -1,0 +1,186 @@
+{
+    "zh-CN-XiaoxiaoNeural": [
+        "general",
+        "assistant",
+        "chat",
+        "customerservice",
+        "newscast",
+        "affectionate",
+        "angry",
+        "calm",
+        "cheerful",
+        "disgruntled",
+        "fearful",
+        "gentle",
+        "lyrical",
+        "sad",
+        "serious",
+        "poetry-reading"
+    ],
+    "zh-CN-YunyangNeural": [
+        "general",
+        "customerservice",
+        "newscast-casual",
+        "narration-professional"
+    ],
+    "zh-CN-XiaochenNeural": [
+        "general"
+    ],
+    "zh-CN-XiaohanNeural": [
+        "general",
+        "calm",
+        "fearful",
+        "cheerful",
+        "disgruntled",
+        "serious",
+        "angry",
+        "sad",
+        "gentle",
+        "affectionate",
+        "embarrassed"
+    ],
+    "zh-CN-XiaomoNeural": [
+        "general",
+        "embarrassed",
+        "calm",
+        "fearful",
+        "cheerful",
+        "disgruntled",
+        "serious",
+        "angry",
+        "sad",
+        "depressed",
+        "affectionate",
+        "gentle",
+        "envious"
+    ],
+    "zh-CN-XiaoqiuNeural": [
+        "general"
+    ],
+    "zh-CN-XiaoruiNeural": [
+        "general",
+        "calm",
+        "fearful",
+        "angry",
+        "sad"
+    ],
+    "zh-CN-XiaoshuangNeural": [
+        "general",
+        "chat"
+    ],
+    "zh-CN-XiaoxuanNeural": [
+        "general",
+        "calm",
+        "fearful",
+        "cheerful",
+        "disgruntled",
+        "serious",
+        "angry",
+        "gentle",
+        "depressed"
+    ],
+    "zh-CN-XiaoyanNeural": [
+        "general"
+    ],
+    "zh-CN-XiaoyouNeural": [
+        "general"
+    ],
+    "zh-CN-YunxiNeural": [
+        "general",
+        "narration-relaxed",
+        "embarrassed",
+        "fearful",
+        "cheerful",
+        "disgruntled",
+        "serious",
+        "angry",
+        "sad",
+        "depressed",
+        "chat",
+        "assistant",
+        "newscast"
+    ],
+    "zh-CN-YunyeNeural": [
+        "general",
+        "embarrassed",
+        "calm",
+        "fearful",
+        "cheerful",
+        "disgruntled",
+        "serious",
+        "angry",
+        "sad"
+    ],
+    "zh-CN-XiaomengNeural": [
+        "general",
+        "chat"
+    ],
+    "zh-CN-XiaoyiNeural": [
+        "general",
+        "angry",
+        "disgruntled",
+        "affectionate",
+        "cheerful",
+        "fearful",
+        "sad",
+        "embarrassed",
+        "serious",
+        "gentle"
+    ],
+    "zh-CN-XiaozhenNeural": [
+        "general",
+        "angry",
+        "disgruntled",
+        "cheerful",
+        "fearful",
+        "sad",
+        "serious"
+    ],
+    "zh-CN-YunfengNeural": [
+        "general",
+        "angry",
+        "disgruntled",
+        "cheerful",
+        "fearful",
+        "sad",
+        "serious",
+        "depressed"
+    ],
+    "zh-CN-YunhaoNeural": [
+        "general",
+        "advertisement_upbeat"
+    ],
+    "zh-CN-YunjianNeural": [
+        "general",
+        "narration-relaxed",
+        "sports_commentary",
+        "sports_commentary_excited"
+    ],
+    "zh-CN-YunxiaNeural": [
+        "general",
+        "narration-relaxed",
+        "calm",
+        "fearful",
+        "cheerful",
+        "angry",
+        "sad"
+    ],
+    "zh-CN-YunzeNeural": [
+        "general",
+        "calm",
+        "fearful",
+        "cheerful",
+        "disgruntled",
+        "serious",
+        "angry",
+        "sad",
+        "depressed",
+        "documentary-narration"
+    ],
+    "zh-CN-liaoning-XiaobeiNeural": [
+        "general"
+    ],
+    "zh-CN-sichuan-YunxiNeural": [
+        "general"
+    ]
+}

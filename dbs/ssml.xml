@@ -1,0 +1,5 @@
+<voice  name="{name}">
+    <mstts:express-as style="{style}">
+        <prosody  rate="{rate}" pitch="{pitch}">{text}{tingdun}</prosody>
+    </mstts:express-as>
+</voice>
